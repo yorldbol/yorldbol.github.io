@@ -413,6 +413,189 @@
             padding: 60px 20px;
             color: #5f6368;
         }
+
+        .settings-button {
+            background: transparent;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .settings-button:hover {
+            background: #f8f9fa;
+        }
+
+        .settings-button .material-icons-outlined {
+            font-size: 18px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .close-button {
+            background: #f1f3f4;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            padding: 8px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .close-button:hover {
+            background: #e8eaed;
+        }
+
+        .token-status {
+            background: #e8f0fe;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .token-status.active {
+            background: #e6f4ea;
+        }
+
+        .token-status.expired {
+            background: #fce8e6;
+        }
+
+        .token-timer {
+            font-size: 24px;
+            font-weight: 500;
+            color: #1a73e8;
+        }
+
+        .token-timer.active {
+            color: #1e8e3e;
+        }
+
+        .token-timer.expired {
+            color: #c5221f;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .token-input-group {
+            margin-bottom: 20px;
+        }
+
+        .token-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            transition: all 0.15s;
+        }
+
+        .token-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .button-full {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .button-primary-full {
+            background: #1a73e8;
+            color: #ffffff;
+        }
+
+        .button-primary-full:hover {
+            background: #1557b0;
+        }
+
+        .button-secondary-full {
+            background: #f8f9fa;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+
+        .button-secondary-full:hover {
+            background: #e8eaed;
+        }
+
+        .button-danger-full {
+            background: #c5221f;
+            color: #ffffff;
+        }
+
+        .button-danger-full:hover {
+            background: #a50e0e;
+        }
     </style>
 </head>
 <body>
@@ -444,6 +627,10 @@
             const [loading, setLoading] = useState(false);
             const [filter, setFilter] = useState('all');
             const [currentUser, setCurrentUser] = useState('');
+            const [showSettings, setShowSettings] = useState(false);
+            const [tempToken, setTempToken] = useState('');
+            const [tokenTimer, setTokenTimer] = useState(0);
+            const [tokenTimerInterval, setTokenTimerInterval] = useState(null);
 
             useEffect(() => {
                 // Check if already logged in
@@ -453,6 +640,21 @@
                     setToken(savedToken);
                     setCurrentUser(savedUser);
                     setIsAuthenticated(true);
+                }
+
+                // Check for active GitHub token timer
+                const savedGithubToken = sessionStorage.getItem('temp_github_token');
+                const savedTimerEnd = sessionStorage.getItem('token_timer_end');
+                if (savedGithubToken && savedTimerEnd) {
+                    const remaining = Math.max(0, Math.floor((parseInt(savedTimerEnd) - Date.now()) / 1000));
+                    if (remaining > 0) {
+                        setTempToken(savedGithubToken);
+                        setTokenTimer(remaining);
+                        startTokenTimer(remaining);
+                    } else {
+                        sessionStorage.removeItem('temp_github_token');
+                        sessionStorage.removeItem('token_timer_end');
+                    }
                 }
             }, []);
 
@@ -556,10 +758,67 @@
                 localStorage.removeItem('volunteer_token');
                 localStorage.removeItem('volunteer_user');
                 localStorage.removeItem('github_token');
+                sessionStorage.removeItem('temp_github_token');
+                sessionStorage.removeItem('token_timer_end');
+                if (tokenTimerInterval) {
+                    clearInterval(tokenTimerInterval);
+                }
                 setIsAuthenticated(false);
                 setToken('');
                 setPassword('');
                 setCurrentUser('');
+                setTempToken('');
+                setTokenTimer(0);
+            };
+
+            const startTokenTimer = (seconds) => {
+                if (tokenTimerInterval) {
+                    clearInterval(tokenTimerInterval);
+                }
+
+                const interval = setInterval(() => {
+                    setTokenTimer(prev => {
+                        const newTime = prev - 1;
+                        if (newTime <= 0) {
+                            clearInterval(interval);
+                            sessionStorage.removeItem('temp_github_token');
+                            sessionStorage.removeItem('token_timer_end');
+                            setTempToken('');
+                            alert('⏰ GitHub token expired. Please add it again to perform management actions.');
+                            return 0;
+                        }
+                        return newTime;
+                    });
+                }, 1000);
+
+                setTokenTimerInterval(interval);
+            };
+
+            const handleSaveToken = () => {
+                if (!tempToken.trim()) {
+                    alert('Please enter a GitHub token');
+                    return;
+                }
+
+                const timerEnd = Date.now() + 30000; // 30 seconds from now
+                sessionStorage.setItem('temp_github_token', tempToken);
+                sessionStorage.setItem('token_timer_end', timerEnd.toString());
+                setTokenTimer(30);
+                startTokenTimer(30);
+                setShowSettings(false);
+                alert('✅ GitHub token saved! You have 30 seconds to perform management actions.');
+            };
+
+            const handleClearToken = () => {
+                sessionStorage.removeItem('temp_github_token');
+                sessionStorage.removeItem('token_timer_end');
+                if (tokenTimerInterval) {
+                    clearInterval(tokenTimerInterval);
+                }
+                setTempToken('');
+                setTokenTimer(0);
+                setShowSettings(false);
+                alert('🗑️ GitHub token cleared.');
             };
 
             const handleAction = async (action, library) => {
@@ -569,7 +828,8 @@
                     if (!confirm(confirmMessage)) return;
                 }
 
-                const githubToken = localStorage.getItem('github_token');
+                // Get GitHub token from session storage (temporary token)
+                const githubToken = sessionStorage.getItem('temp_github_token');
 
                 try {
                     switch(action) {
@@ -585,7 +845,8 @@
                         
                         case 'delete':
                             if (!githubToken) {
-                                alert('⚠️ GitHub token required for this action. Please contact admin to configure your token.');
+                                alert('⚠️ GitHub token required. Please go to Settings and add your token.');
+                                setShowSettings(true);
                                 return;
                             }
                             
@@ -617,7 +878,8 @@
                         case 'disable':
                             // Create a .disabled marker file
                             if (!githubToken) {
-                                alert('⚠️ GitHub token required for this action.');
+                                alert('⚠️ GitHub token required. Please go to Settings and add your token.');
+                                setShowSettings(true);
                                 return;
                             }
                             
@@ -646,7 +908,8 @@
                         case 'enable':
                             // Remove .disabled marker file
                             if (!githubToken) {
-                                alert('⚠️ GitHub token required for this action.');
+                                alert('⚠️ GitHub token required. Please go to Settings and add your token.');
+                                setShowSettings(true);
                                 return;
                             }
                             
@@ -786,10 +1049,20 @@
                                 </div>
                             </div>
                             <div className="user-info">
+                                {tokenTimer > 0 && (
+                                    <span className="user-badge" style={{background: '#e6f4ea', color: '#1e8e3e'}}>
+                                        <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>timer</span>
+                                        {' '}{tokenTimer}s
+                                    </span>
+                                )}
                                 <span className="user-badge">
                                     <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>person</span>
                                     {' '}{currentUser}
                                 </span>
+                                <button className="settings-button" onClick={() => setShowSettings(true)}>
+                                    <span className="material-icons-outlined">settings</span>
+                                    Settings
+                                </button>
                                 <button className="logout-button" onClick={handleLogout}>
                                     <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>logout</span>
                                     {' '}Logout
@@ -910,6 +1183,85 @@
                             </div>
                         )}
                     </div>
+
+                    {showSettings && (
+                        <div className="modal-overlay" onClick={() => setShowSettings(false)}>
+                            <div className="modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <div className="modal-title">
+                                        <span className="material-icons-outlined" style={{fontSize: 24, verticalAlign: 'middle', marginRight: 8}}>settings</span>
+                                        GitHub Token Settings
+                                    </div>
+                                    <button className="close-button" onClick={() => setShowSettings(false)}>
+                                        <span className="material-icons-outlined">close</span>
+                                    </button>
+                                </div>
+
+                                {tokenTimer > 0 ? (
+                                    <div className="token-status active">
+                                        <span className="material-icons-outlined" style={{fontSize: 32, color: '#1e8e3e'}}>check_circle</span>
+                                        <div style={{flex: 1}}>
+                                            <div style={{fontWeight: 500, color: '#1e8e3e', marginBottom: 4}}>Token Active</div>
+                                            <div style={{fontSize: 13, color: '#5f6368'}}>You can perform management actions</div>
+                                        </div>
+                                        <div className="token-timer active">{tokenTimer}s</div>
+                                    </div>
+                                ) : (
+                                    <div className="token-status expired">
+                                        <span className="material-icons-outlined" style={{fontSize: 32, color: '#c5221f'}}>cancel</span>
+                                        <div style={{flex: 1}}>
+                                            <div style={{fontWeight: 500, color: '#c5221f', marginBottom: 4}}>No Active Token</div>
+                                            <div style={{fontSize: 13, color: '#5f6368'}}>Add a token to manage libraries</div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="info-box">
+                                    <div style={{fontWeight: 500, marginBottom: 8, color: '#202124'}}>
+                                        <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>info</span>
+                                        {' '}How it works:
+                                    </div>
+                                    • Your GitHub token is stored temporarily for 30 seconds<br/>
+                                    • During this time, you can delete, enable, or disable libraries<br/>
+                                    • After 30 seconds, the token is automatically deleted<br/>
+                                    • Your token is never sent to any server, only stored in your browser
+                                </div>
+
+                                <div className="token-input-group">
+                                    <label style={{display: 'block', fontSize: 14, fontWeight: 500, marginBottom: 8, color: '#202124'}}>
+                                        GitHub Personal Access Token
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="token-input"
+                                        placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                                        value={tempToken}
+                                        onChange={(e) => setTempToken(e.target.value)}
+                                    />
+                                    <div style={{fontSize: 12, color: '#5f6368', marginTop: 6}}>
+                                        Create a token at: <a href="https://github.com/settings/tokens" target="_blank" style={{color: '#1a73e8'}}>github.com/settings/tokens</a>
+                                    </div>
+                                </div>
+
+                                <div className="button-group">
+                                    {tokenTimer > 0 && (
+                                        <button className="button-danger-full" onClick={handleClearToken}>
+                                            <span className="material-icons-outlined" style={{fontSize: 18, verticalAlign: 'middle'}}>delete</span>
+                                            {' '}Clear Token
+                                        </button>
+                                    )}
+                                    <button 
+                                        className="button-primary-full" 
+                                        onClick={handleSaveToken}
+                                        disabled={!tempToken.trim()}
+                                    >
+                                        <span className="material-icons-outlined" style={{fontSize: 18, verticalAlign: 'middle'}}>save</span>
+                                        {' '}Save Token (30s)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </>
             );
         }
