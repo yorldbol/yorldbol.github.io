@@ -631,6 +631,7 @@
             const [tempToken, setTempToken] = useState('');
             const [tokenTimer, setTokenTimer] = useState(0);
             const [tokenTimerInterval, setTokenTimerInterval] = useState(null);
+            const [keepTokenPermanent, setKeepTokenPermanent] = useState(false);
 
             useEffect(() => {
                 // Check if already logged in
@@ -645,15 +646,23 @@
                 // Check for active GitHub token timer
                 const savedGithubToken = sessionStorage.getItem('temp_github_token');
                 const savedTimerEnd = sessionStorage.getItem('token_timer_end');
-                if (savedGithubToken && savedTimerEnd) {
-                    const remaining = Math.max(0, Math.floor((parseInt(savedTimerEnd) - Date.now()) / 1000));
-                    if (remaining > 0) {
-                        setTempToken(savedGithubToken);
-                        setTokenTimer(remaining);
-                        startTokenTimer(remaining);
-                    } else {
-                        sessionStorage.removeItem('temp_github_token');
-                        sessionStorage.removeItem('token_timer_end');
+                const isPermanent = sessionStorage.getItem('token_permanent') === 'true';
+                
+                if (savedGithubToken) {
+                    setTempToken(savedGithubToken);
+                    
+                    if (isPermanent) {
+                        setKeepTokenPermanent(true);
+                        setTokenTimer(-1); // -1 indicates permanent
+                    } else if (savedTimerEnd) {
+                        const remaining = Math.max(0, Math.floor((parseInt(savedTimerEnd) - Date.now()) / 1000));
+                        if (remaining > 0) {
+                            setTokenTimer(remaining);
+                            startTokenTimer(remaining);
+                        } else {
+                            sessionStorage.removeItem('temp_github_token');
+                            sessionStorage.removeItem('token_timer_end');
+                        }
                     }
                 }
             }, []);
@@ -800,23 +809,38 @@
                     return;
                 }
 
-                const timerEnd = Date.now() + 30000; // 30 seconds from now
                 sessionStorage.setItem('temp_github_token', tempToken);
-                sessionStorage.setItem('token_timer_end', timerEnd.toString());
-                setTokenTimer(30);
-                startTokenTimer(30);
+                
+                if (keepTokenPermanent) {
+                    sessionStorage.setItem('token_permanent', 'true');
+                    sessionStorage.removeItem('token_timer_end');
+                    if (tokenTimerInterval) {
+                        clearInterval(tokenTimerInterval);
+                    }
+                    setTokenTimer(-1); // -1 indicates permanent
+                    alert('✅ GitHub token saved permanently! It will remain active until you manually clear it.');
+                } else {
+                    sessionStorage.removeItem('token_permanent');
+                    const timerEnd = Date.now() + 30000; // 30 seconds from now
+                    sessionStorage.setItem('token_timer_end', timerEnd.toString());
+                    setTokenTimer(30);
+                    startTokenTimer(30);
+                    alert('✅ GitHub token saved! You have 30 seconds to perform management actions.');
+                }
+                
                 setShowSettings(false);
-                alert('✅ GitHub token saved! You have 30 seconds to perform management actions.');
             };
 
             const handleClearToken = () => {
                 sessionStorage.removeItem('temp_github_token');
                 sessionStorage.removeItem('token_timer_end');
+                sessionStorage.removeItem('token_permanent');
                 if (tokenTimerInterval) {
                     clearInterval(tokenTimerInterval);
                 }
                 setTempToken('');
                 setTokenTimer(0);
+                setKeepTokenPermanent(false);
                 setShowSettings(false);
                 alert('🗑️ GitHub token cleared.');
             };
@@ -1055,6 +1079,12 @@
                                         {' '}{tokenTimer}s
                                     </span>
                                 )}
+                                {tokenTimer === -1 && (
+                                    <span className="user-badge" style={{background: '#e6f4ea', color: '#1e8e3e'}}>
+                                        <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>lock_open</span>
+                                        {' '}Token Active
+                                    </span>
+                                )}
                                 <span className="user-badge">
                                     <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>person</span>
                                     {' '}{currentUser}
@@ -1206,6 +1236,15 @@
                                         </div>
                                         <div className="token-timer active">{tokenTimer}s</div>
                                     </div>
+                                ) : tokenTimer === -1 ? (
+                                    <div className="token-status active">
+                                        <span className="material-icons-outlined" style={{fontSize: 32, color: '#1e8e3e'}}>lock_open</span>
+                                        <div style={{flex: 1}}>
+                                            <div style={{fontWeight: 500, color: '#1e8e3e', marginBottom: 4}}>Token Active (Permanent)</div>
+                                            <div style={{fontSize: 13, color: '#5f6368'}}>Token will remain until manually cleared</div>
+                                        </div>
+                                        <span className="material-icons-outlined" style={{fontSize: 32, color: '#1e8e3e'}}>all_inclusive</span>
+                                    </div>
                                 ) : (
                                     <div className="token-status expired">
                                         <span className="material-icons-outlined" style={{fontSize: 32, color: '#c5221f'}}>cancel</span>
@@ -1221,9 +1260,9 @@
                                         <span className="material-icons-outlined" style={{fontSize: 16, verticalAlign: 'middle'}}>info</span>
                                         {' '}How it works:
                                     </div>
-                                    • Your GitHub token is stored temporarily for 30 seconds<br/>
-                                    • During this time, you can delete, enable, or disable libraries<br/>
-                                    • After 30 seconds, the token is automatically deleted<br/>
+                                    • Choose to keep your token for 30 seconds or permanently<br/>
+                                    • Temporary: Token auto-deletes after 30 seconds<br/>
+                                    • Permanent: Token stays until you manually clear it<br/>
                                     • Your token is never sent to any server, only stored in your browser
                                 </div>
 
@@ -1243,8 +1282,22 @@
                                     </div>
                                 </div>
 
+                                <div style={{marginBottom: 20}}>
+                                    <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', padding: 12, background: '#f8f9fa', borderRadius: 8}}>
+                                        <input
+                                            type="checkbox"
+                                            checked={keepTokenPermanent}
+                                            onChange={(e) => setKeepTokenPermanent(e.target.checked)}
+                                            style={{width: 18, height: 18, cursor: 'pointer'}}
+                                        />
+                                        <span style={{fontSize: 14, color: '#202124'}}>
+                                            Keep token permanently (until manually cleared)
+                                        </span>
+                                    </label>
+                                </div>
+
                                 <div className="button-group">
-                                    {tokenTimer > 0 && (
+                                    {(tokenTimer > 0 || tokenTimer === -1) && (
                                         <button className="button-danger-full" onClick={handleClearToken}>
                                             <span className="material-icons-outlined" style={{fontSize: 18, verticalAlign: 'middle'}}>delete</span>
                                             {' '}Clear Token
@@ -1256,7 +1309,7 @@
                                         disabled={!tempToken.trim()}
                                     >
                                         <span className="material-icons-outlined" style={{fontSize: 18, verticalAlign: 'middle'}}>save</span>
-                                        {' '}Save Token (30s)
+                                        {' '}Save Token {keepTokenPermanent ? '(Permanent)' : '(30s)'}
                                     </button>
                                 </div>
                             </div>
