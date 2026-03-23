@@ -1,0 +1,70 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "datetime",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Date and time operations",
+  license: "Proprietary",
+  keywords: {date,time,datetime,timestamp,timezone}
+}
+
+@type{
+  name: "DateTime",
+  fields: {year:int, month:int, day:int, hour:int, minute:int, second:int, timezone:string}
+}
+
+@function{
+  name: "now",
+  params: {},
+  returns: "DateTime"
+}
+
+@function{
+  name: "parse",
+  params: {dateString:string, format:string},
+  returns: "DateTime"
+}
+
+@function{
+  name: "format",
+  params: {datetime:DateTime, format:string},
+  returns: "string"
+}
+
+@function{
+  name: "add",
+  params: {datetime:DateTime, amount:int, unit:string},
+  returns: "DateTime"
+}
+
+@function{
+  name: "diff",
+  params: {dt1:DateTime, dt2:DateTime, unit:string},
+  returns: "int"
+}
+
+@constant{
+  namespace: "FORMAT",
+  constants: {
+    ISO8601: {value:"YYYY-MM-DDTHH:mm:ss", type:"string"},
+    DATE: {value:"YYYY-MM-DD", type:"string"},
+    TIME: {value:"HH:mm:ss", type:"string"},
+    DATETIME: {value:"YYYY-MM-DD HH:mm:ss", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "UNIT",
+  constants: {
+    SECOND: {value:"second", type:"string"},
+    MINUTE: {value:"minute", type:"string"},
+    HOUR: {value:"hour", type:"string"},
+    DAY: {value:"day", type:"string"},
+    WEEK: {value:"week", type:"string"},
+    MONTH: {value:"month", type:"string"},
+    YEAR: {value:"year", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

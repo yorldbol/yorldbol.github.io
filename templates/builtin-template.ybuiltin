@@ -1,0 +1,184 @@
+^yorl-builtin 1.0.0-2437\
+
+! ============================================
+! Yorl Built-in Library Template
+! ============================================
+! Copy this template to create your own built-in library
+! Replace all placeholder values with your actual implementation
+
+! ============================================
+! METADATA SECTION (Required)
+! ============================================
+@metadata{
+  name: "my-library",
+  version: "1.0.0",
+  author: "Your Name",
+  description: "Brief description of what your library does",
+  license: "MIT",
+  homepage: "https://github.com/yourusername/my-library",
+  repository: "https://github.com/yourusername/my-library",
+  keywords: {keyword1,keyword2,keyword3},
+  dependencies: {core}
+}
+
+! ============================================
+! TYPE DEFINITIONS
+! ============================================
+! Define custom types for your library
+
+@type{
+  name: "MyType",
+  description: "Description of this type",
+  fields: {
+    field1: string,
+    field2: int,
+    field3: boolean,
+    nestedField: {
+      subfield1: string,
+      subfield2: int
+    }
+  },
+  methods: {
+    toString: {params: {}, returns: "string"},
+    validate: {params: {}, returns: "boolean"}
+  }
+}
+
+@type{
+  name: "ConfigType",
+  description: "Configuration type",
+  fields: {
+    enabled: boolean,
+    timeout: int,
+    retries: int
+  }
+}
+
+! ============================================
+! FUNCTION DEFINITIONS
+! ============================================
+! Define functions provided by your library
+
+@function{
+  name: "myFunction",
+  description: "Description of what this function does",
+  params: {
+    input: string,
+    count: int,
+    optional: {type: boolean, default: true}
+  },
+  returns: "string",
+  throws: {InvalidInput, ProcessingError},
+  examples: {
+    "Basic usage": "myFunction('hello', 5)",
+    "With optional": "myFunction('world', 3, false)"
+  }
+}
+
+@function{
+  name: "processData",
+  description: "Process data with configuration",
+  params: {
+    data: array,
+    config: ConfigType
+  },
+  returns: "array",
+  throws: {InvalidData},
+  examples: {
+    "Example": "processData([1,2,3], {enabled:true,timeout:1000,retries:3})"
+  }
+}
+
+! ============================================
+! CONSTANT DEFINITIONS
+! ============================================
+! Define constants used by your library
+
+! Simple constants
+@constant{
+  name: "DEFAULT_TIMEOUT",
+  value: 5000,
+  type: "int",
+  description: "Default timeout in milliseconds"
+}
+
+@constant{
+  name: "MAX_RETRIES",
+  value: 3,
+  type: "int",
+  description: "Maximum number of retries"
+}
+
+! Namespaced constants
+@constant{
+  namespace: "STATUS",
+  constants: {
+    SUCCESS: {value: 0, type: "int", description: "Operation successful"},
+    ERROR: {value: 1, type: "int", description: "Operation failed"},
+    PENDING: {value: 2, type: "int", description: "Operation pending"}
+  }
+}
+
+@constant{
+  namespace: "MODE",
+  constants: {
+    FAST: {value: "fast", type: "string", description: "Fast mode"},
+    ACCURATE: {value: "accurate", type: "string", description: "Accurate mode"},
+    BALANCED: {value: "balanced", type: "string", description: "Balanced mode"}
+  }
+}
+
+! ============================================
+! NAMESPACE ORGANIZATION
+! ============================================
+! Organize related items in namespaces
+
+@namespace{
+  name: "CONFIG",
+  description: "Configuration constants",
+  items: {
+    DEFAULTS: {
+      TIMEOUT: 5000,
+      RETRIES: 3,
+      ENABLED: true
+    },
+    LIMITS: {
+      MAX_SIZE: 1048576,
+      MAX_ITEMS: 1000
+    }
+  }
+}
+
+! ============================================
+! USAGE EXAMPLES
+! ============================================
+! Provide usage examples (as comments)
+
+! Example 1: Basic usage
+! import @builtin{usrsr/my-library} -as[mylib];
+! 
+! class -className=app -type=application;
+!   .config
+!     .config.timeout -value=mylib.DEFAULT_TIMEOUT;
+!   .data
+!     .data.result -value=mylib.myFunction('test', 5);
+
+! Example 2: Using types
+! import @builtin{usrsr/my-library} -as[mylib];
+! 
+! class -className=processor -type=data;
+!   .config
+!     .config.settings -type=mylib.ConfigType;
+!     .config.settings.enabled -value=true;
+!     .config.settings.timeout -value=mylib.CONFIG.DEFAULTS.TIMEOUT;
+
+! Example 3: Using constants
+! import @builtin{usrsr/my-library} -as[mylib];
+! 
+! class -className=handler -type=application;
+!   .status
+!     .status.code -value=mylib.STATUS.SUCCESS;
+!   .mode
+!     .mode.type -value=mylib.MODE.FAST;
+
+^END_OF_BUILTIN

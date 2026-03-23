@@ -1,0 +1,123 @@
+^yorl-builtin 1.0.0-2437\
+
+! ============================================
+! Web Library - HTTP/WebSocket/REST APIs
+! ============================================
+
+@metadata{
+  name: "web",
+  version: "1.0.0",
+  author: "Yorl Community",
+  description: "Web development library with HTTP, WebSocket, and REST API support",
+  license: "MIT",
+  keywords: {web,http,websocket,rest,api,server},
+  dependencies: {core}
+}
+
+! ============================================
+! TYPES
+! ============================================
+
+@type{
+  name: "HttpRequest",
+  description: "HTTP request object",
+  fields: {
+    method: string,
+    path: string,
+    headers: object,
+    body: string,
+    query: object
+  }
+}
+
+@type{
+  name: "HttpResponse",
+  description: "HTTP response object",
+  fields: {
+    status: int,
+    headers: object,
+    body: string
+  }
+}
+
+@type{
+  name: "ServerConfig",
+  description: "Server configuration",
+  fields: {
+    host: string,
+    port: int,
+    ssl: boolean,
+    cors: boolean
+  }
+}
+
+! ============================================
+! FUNCTIONS
+! ============================================
+
+@function{
+  name: "startServer",
+  description: "Start HTTP server",
+  params: {
+    config: ServerConfig,
+    handler: function
+  },
+  returns: "boolean"
+}
+
+@function{
+  name: "get",
+  description: "HTTP GET request",
+  params: {
+    url: string,
+    headers: object
+  },
+  returns: "HttpResponse"
+}
+
+@function{
+  name: "post",
+  description: "HTTP POST request",
+  params: {
+    url: string,
+    body: string,
+    headers: object
+  },
+  returns: "HttpResponse"
+}
+
+! ============================================
+! CONSTANTS
+! ============================================
+
+@constant{
+  namespace: "HTTP",
+  constants: {
+    OK: {value: 200, type: "int"},
+    CREATED: {value: 201, type: "int"},
+    BAD_REQUEST: {value: 400, type: "int"},
+    NOT_FOUND: {value: 404, type: "int"},
+    ERROR: {value: 500, type: "int"}
+  }
+}
+
+@constant{
+  namespace: "METHOD",
+  constants: {
+    GET: {value: "GET", type: "string"},
+    POST: {value: "POST", type: "string"},
+    PUT: {value: "PUT", type: "string"},
+    DELETE: {value: "DELETE", type: "string"}
+  }
+}
+
+@constant{
+  namespace: "PORT",
+  constants: {
+    HTTP: {value: 80, type: "int"},
+    HTTPS: {value: 443, type: "int"},
+    DEV: {value: 8080, type: "int"}
+  }
+}
+
+^END_OF_BUILTIN

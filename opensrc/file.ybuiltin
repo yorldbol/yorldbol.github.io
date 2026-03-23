@@ -1,0 +1,83 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "file",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "File I/O operations - read, write, compression",
+  license: "Proprietary",
+  keywords: {file,io,read,write,compress,zip}
+}
+
+@type{
+  name: "File",
+  fields: {path:string, size:int, modified:int, permissions:string}
+}
+
+@type{
+  name: "Directory",
+  fields: {path:string, files:array, subdirs:array}
+}
+
+@function{
+  name: "read",
+  params: {path:string, encoding:string},
+  returns: "string"
+}
+
+@function{
+  name: "write",
+  params: {path:string, data:string, encoding:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "append",
+  params: {path:string, data:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "delete",
+  params: {path:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "exists",
+  params: {path:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "compress",
+  params: {source:string, dest:string, format:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "decompress",
+  params: {source:string, dest:string},
+  returns: "boolean"
+}
+
+@constant{
+  namespace: "ENCODING",
+  constants: {
+    UTF8: {value:"utf-8", type:"string"},
+    ASCII: {value:"ascii", type:"string"},
+    BINARY: {value:"binary", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "COMPRESSION",
+  constants: {
+    ZIP: {value:"zip", type:"string"},
+    GZIP: {value:"gzip", type:"string"},
+    TAR: {value:"tar", type:"string"},
+    BZIP2: {value:"bzip2", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

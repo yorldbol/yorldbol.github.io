@@ -1,0 +1,63 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "network",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Network operations - TCP/UDP, sockets, protocols",
+  license: "Proprietary",
+  keywords: {network,tcp,udp,socket,protocol}
+}
+
+@type{
+  name: "Socket",
+  fields: {host:string, port:int, protocol:string, timeout:int}
+}
+
+@type{
+  name: "Packet",
+  fields: {data:string, size:int, checksum:string}
+}
+
+@function{
+  name: "connect",
+  params: {host:string, port:int, protocol:string},
+  returns: "Socket"
+}
+
+@function{
+  name: "send",
+  params: {socket:Socket, data:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "receive",
+  params: {socket:Socket, size:int},
+  returns: "Packet"
+}
+
+@constant{
+  namespace: "PROTOCOL",
+  constants: {
+    TCP: {value:"tcp", type:"string"},
+    UDP: {value:"udp", type:"string"},
+    HTTP: {value:"http", type:"string"},
+    HTTPS: {value:"https", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "PORT",
+  constants: {
+    FTP: {value:21, type:"int"},
+    SSH: {value:22, type:"int"},
+    TELNET: {value:23, type:"int"},
+    SMTP: {value:25, type:"int"},
+    DNS: {value:53, type:"int"},
+    HTTP: {value:80, type:"int"},
+    HTTPS: {value:443, type:"int"}
+  }
+}
+
+^END_OF_BUILTIN

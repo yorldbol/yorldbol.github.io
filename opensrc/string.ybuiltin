@@ -1,0 +1,78 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "string",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "String manipulation and utilities",
+  license: "Proprietary",
+  keywords: {string,text,manipulation,regex}
+}
+
+@function{
+  name: "length",
+  params: {str:string},
+  returns: "int"
+}
+
+@function{
+  name: "upper",
+  params: {str:string},
+  returns: "string"
+}
+
+@function{
+  name: "lower",
+  params: {str:string},
+  returns: "string"
+}
+
+@function{
+  name: "trim",
+  params: {str:string},
+  returns: "string"
+}
+
+@function{
+  name: "split",
+  params: {str:string, delimiter:string},
+  returns: "array"
+}
+
+@function{
+  name: "join",
+  params: {arr:array, delimiter:string},
+  returns: "string"
+}
+
+@function{
+  name: "replace",
+  params: {str:string, search:string, replace:string},
+  returns: "string"
+}
+
+@function{
+  name: "match",
+  params: {str:string, pattern:string},
+  returns: "array"
+}
+
+@function{
+  name: "contains",
+  params: {str:string, substring:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "startsWith",
+  params: {str:string, prefix:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "endsWith",
+  params: {str:string, suffix:string},
+  returns: "boolean"
+}
+
+^END_OF_BUILTIN

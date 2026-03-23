@@ -1,0 +1,79 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "logging",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Logging and monitoring utilities",
+  license: "Proprietary",
+  keywords: {log,logger,debug,monitor}
+}
+
+@type{
+  name: "Logger",
+  fields: {name:string, level:string, handlers:array}
+}
+
+@type{
+  name: "LogEntry",
+  fields: {level:string, message:string, timestamp:int, context:object}
+}
+
+@function{
+  name: "createLogger",
+  params: {name:string, level:string},
+  returns: "Logger"
+}
+
+@function{
+  name: "debug",
+  params: {logger:Logger, message:string, context:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "info",
+  params: {logger:Logger, message:string, context:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "warn",
+  params: {logger:Logger, message:string, context:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "error",
+  params: {logger:Logger, message:string, context:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "fatal",
+  params: {logger:Logger, message:string, context:object},
+  returns: "boolean"
+}
+
+@constant{
+  namespace: "LEVEL",
+  constants: {
+    DEBUG: {value:"debug", type:"string"},
+    INFO: {value:"info", type:"string"},
+    WARN: {value:"warn", type:"string"},
+    ERROR: {value:"error", type:"string"},
+    FATAL: {value:"fatal", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "HANDLER",
+  constants: {
+    CONSOLE: {value:"console", type:"string"},
+    FILE: {value:"file", type:"string"},
+    SYSLOG: {value:"syslog", type:"string"},
+    HTTP: {value:"http", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

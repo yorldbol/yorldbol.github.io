@@ -1,0 +1,62 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "regex",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Regular expression operations",
+  license: "Proprietary",
+  keywords: {regex,pattern,match,search}
+}
+
+@type{
+  name: "Pattern",
+  fields: {pattern:string, flags:string}
+}
+
+@type{
+  name: "Match",
+  fields: {matched:string, groups:array, index:int}
+}
+
+@function{
+  name: "compile",
+  params: {pattern:string, flags:string},
+  returns: "Pattern"
+}
+
+@function{
+  name: "test",
+  params: {pattern:Pattern, text:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "match",
+  params: {pattern:Pattern, text:string},
+  returns: "Match"
+}
+
+@function{
+  name: "matchAll",
+  params: {pattern:Pattern, text:string},
+  returns: "array"
+}
+
+@function{
+  name: "replace",
+  params: {pattern:Pattern, text:string, replacement:string},
+  returns: "string"
+}
+
+@constant{
+  namespace: "FLAG",
+  constants: {
+    GLOBAL: {value:"g", type:"string"},
+    CASE_INSENSITIVE: {value:"i", type:"string"},
+    MULTILINE: {value:"m", type:"string"},
+    DOTALL: {value:"s", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

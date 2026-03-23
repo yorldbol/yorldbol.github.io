@@ -1,0 +1,48 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "json",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "JSON parsing and serialization",
+  license: "Proprietary",
+  keywords: {json,parse,serialize,data}
+}
+
+@function{
+  name: "parse",
+  params: {json:string},
+  returns: "object"
+}
+
+@function{
+  name: "stringify",
+  params: {data:object, pretty:boolean},
+  returns: "string"
+}
+
+@function{
+  name: "validate",
+  params: {json:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "merge",
+  params: {obj1:object, obj2:object},
+  returns: "object"
+}
+
+@constant{
+  namespace: "TYPE",
+  constants: {
+    OBJECT: {value:"object", type:"string"},
+    ARRAY: {value:"array", type:"string"},
+    STRING: {value:"string", type:"string"},
+    NUMBER: {value:"number", type:"string"},
+    BOOLEAN: {value:"boolean", type:"string"},
+    NULL: {value:"null", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

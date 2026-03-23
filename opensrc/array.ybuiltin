@@ -1,0 +1,84 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "array",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Array operations and utilities",
+  license: "Proprietary",
+  keywords: {array,list,collection,iterate}
+}
+
+@function{
+  name: "length",
+  params: {arr:array},
+  returns: "int"
+}
+
+@function{
+  name: "push",
+  params: {arr:array, item:object},
+  returns: "array"
+}
+
+@function{
+  name: "pop",
+  params: {arr:array},
+  returns: "object"
+}
+
+@function{
+  name: "shift",
+  params: {arr:array},
+  returns: "object"
+}
+
+@function{
+  name: "unshift",
+  params: {arr:array, item:object},
+  returns: "array"
+}
+
+@function{
+  name: "slice",
+  params: {arr:array, start:int, end:int},
+  returns: "array"
+}
+
+@function{
+  name: "splice",
+  params: {arr:array, start:int, deleteCount:int, items:array},
+  returns: "array"
+}
+
+@function{
+  name: "map",
+  params: {arr:array, func:function},
+  returns: "array"
+}
+
+@function{
+  name: "filter",
+  params: {arr:array, func:function},
+  returns: "array"
+}
+
+@function{
+  name: "reduce",
+  params: {arr:array, func:function, initial:object},
+  returns: "object"
+}
+
+@function{
+  name: "sort",
+  params: {arr:array, func:function},
+  returns: "array"
+}
+
+@function{
+  name: "reverse",
+  params: {arr:array},
+  returns: "array"
+}
+
+^END_OF_BUILTIN

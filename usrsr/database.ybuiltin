@@ -1,0 +1,133 @@
+^yorl-builtin 1.0.0-2437\
+
+! ============================================
+! Database Library - SQL/NoSQL Operations
+! ============================================
+
+@metadata{
+  name: "database",
+  version: "1.0.0",
+  author: "Yorl Community",
+  description: "Database operations for SQL and NoSQL databases",
+  license: "MIT",
+  keywords: {database,sql,nosql,query,orm},
+  dependencies: {core}
+}
+
+! ============================================
+! TYPES
+! ============================================
+
+@type{
+  name: "Connection",
+  description: "Database connection",
+  fields: {
+    type: string,
+    host: string,
+    port: int,
+    database: string,
+    username: string,
+    password: string
+  }
+}
+
+@type{
+  name: "Query",
+  description: "Database query",
+  fields: {
+    sql: string,
+    params: array,
+    timeout: int
+  }
+}
+
+@type{
+  name: "Result",
+  description: "Query result",
+  fields: {
+    rows: array,
+    count: int,
+    affected: int
+  }
+}
+
+! ============================================
+! FUNCTIONS
+! ============================================
+
+@function{
+  name: "connect",
+  description: "Connect to database",
+  params: {
+    config: Connection
+  },
+  returns: "boolean"
+}
+
+@function{
+  name: "query",
+  description: "Execute query",
+  params: {
+    sql: string,
+    params: array
+  },
+  returns: "Result"
+}
+
+@function{
+  name: "insert",
+  description: "Insert record",
+  params: {
+    table: string,
+    data: object
+  },
+  returns: "int"
+}
+
+@function{
+  name: "update",
+  description: "Update records",
+  params: {
+    table: string,
+    data: object,
+    where: object
+  },
+  returns: "int"
+}
+
+@function{
+  name: "delete",
+  description: "Delete records",
+  params: {
+    table: string,
+    where: object
+  },
+  returns: "int"
+}
+
+! ============================================
+! CONSTANTS
+! ============================================
+
+@constant{
+  namespace: "TYPE",
+  constants: {
+    MYSQL: {value: "mysql", type: "string"},
+    POSTGRESQL: {value: "postgresql", type: "string"},
+    SQLITE: {value: "sqlite", type: "string"},
+    MONGODB: {value: "mongodb", type: "string"},
+    REDIS: {value: "redis", type: "string"}
+  }
+}
+
+@constant{
+  namespace: "PORT",
+  constants: {
+    MYSQL: {value: 3306, type: "int"},
+    POSTGRESQL: {value: 5432, type: "int"},
+    MONGODB: {value: 27017, type: "int"},
+    REDIS: {value: 6379, type: "int"}
+  }
+}
+
+^END_OF_BUILTIN

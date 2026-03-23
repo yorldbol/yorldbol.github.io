@@ -1,0 +1,94 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "video",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Video processing and manipulation",
+  license: "Proprietary",
+  keywords: {video,movie,mp4,avi,codec}
+}
+
+@type{
+  name: "VideoFile",
+  fields: {path:string, format:string, duration:float, width:int, height:int, fps:float}
+}
+
+@type{
+  name: "VideoFrame",
+  fields: {data:array, width:int, height:int, timestamp:float}
+}
+
+@function{
+  name: "load",
+  params: {path:string},
+  returns: "VideoFile"
+}
+
+@function{
+  name: "save",
+  params: {video:VideoFile, path:string, format:string, codec:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "getFrame",
+  params: {video:VideoFile, timestamp:float},
+  returns: "VideoFrame"
+}
+
+@function{
+  name: "trim",
+  params: {video:VideoFile, start:float, end:float},
+  returns: "VideoFile"
+}
+
+@function{
+  name: "resize",
+  params: {video:VideoFile, width:int, height:int},
+  returns: "VideoFile"
+}
+
+@function{
+  name: "rotate",
+  params: {video:VideoFile, angle:float},
+  returns: "VideoFile"
+}
+
+@function{
+  name: "concat",
+  params: {videos:array},
+  returns: "VideoFile"
+}
+
+@constant{
+  namespace: "FORMAT",
+  constants: {
+    MP4: {value:"mp4", type:"string"},
+    AVI: {value:"avi", type:"string"},
+    MOV: {value:"mov", type:"string"},
+    MKV: {value:"mkv", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "CODEC",
+  constants: {
+    H264: {value:"h264", type:"string"},
+    H265: {value:"h265", type:"string"},
+    VP9: {value:"vp9", type:"string"},
+    AV1: {value:"av1", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "FPS",
+  constants: {
+    CINEMA: {value:24, type:"int"},
+    PAL: {value:25, type:"int"},
+    NTSC: {value:30, type:"int"},
+    HD: {value:60, type:"int"}
+  }
+}
+
+^END_OF_BUILTIN

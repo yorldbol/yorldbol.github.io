@@ -1,0 +1,80 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "testing",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Testing and assertion utilities",
+  license: "Proprietary",
+  keywords: {test,assert,mock,unit,integration}
+}
+
+@type{
+  name: "TestSuite",
+  fields: {name:string, tests:array, passed:int, failed:int}
+}
+
+@type{
+  name: "TestCase",
+  fields: {name:string, func:function, status:string, error:string}
+}
+
+@function{
+  name: "describe",
+  params: {name:string, func:function},
+  returns: "TestSuite"
+}
+
+@function{
+  name: "it",
+  params: {name:string, func:function},
+  returns: "TestCase"
+}
+
+@function{
+  name: "assertEqual",
+  params: {actual:object, expected:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "assertNotEqual",
+  params: {actual:object, expected:object},
+  returns: "boolean"
+}
+
+@function{
+  name: "assertTrue",
+  params: {value:boolean},
+  returns: "boolean"
+}
+
+@function{
+  name: "assertFalse",
+  params: {value:boolean},
+  returns: "boolean"
+}
+
+@function{
+  name: "assertThrows",
+  params: {func:function, errorType:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "mock",
+  params: {func:function, returnValue:object},
+  returns: "function"
+}
+
+@constant{
+  namespace: "STATUS",
+  constants: {
+    PASSED: {value:"passed", type:"string"},
+    FAILED: {value:"failed", type:"string"},
+    SKIPPED: {value:"skipped", type:"string"},
+    PENDING: {value:"pending", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

@@ -1,0 +1,66 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "crypto",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Cryptography - encryption, hashing, security",
+  license: "Proprietary",
+  keywords: {crypto,encryption,hash,security,aes,rsa}
+}
+
+@type{
+  name: "Key",
+  fields: {algorithm:string, size:int, data:string}
+}
+
+@type{
+  name: "Hash",
+  fields: {algorithm:string, digest:string}
+}
+
+@function{
+  name: "encrypt",
+  params: {data:string, key:Key, algorithm:string},
+  returns: "string"
+}
+
+@function{
+  name: "decrypt",
+  params: {data:string, key:Key, algorithm:string},
+  returns: "string"
+}
+
+@function{
+  name: "hash",
+  params: {data:string, algorithm:string},
+  returns: "Hash"
+}
+
+@function{
+  name: "generateKey",
+  params: {algorithm:string, size:int},
+  returns: "Key"
+}
+
+@constant{
+  namespace: "ALGORITHM",
+  constants: {
+    AES128: {value:"aes-128", type:"string"},
+    AES256: {value:"aes-256", type:"string"},
+    RSA2048: {value:"rsa-2048", type:"string"},
+    RSA4096: {value:"rsa-4096", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "HASH",
+  constants: {
+    MD5: {value:"md5", type:"string"},
+    SHA1: {value:"sha1", type:"string"},
+    SHA256: {value:"sha256", type:"string"},
+    SHA512: {value:"sha512", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

@@ -1,0 +1,88 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "graphics",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "2D/3D graphics and rendering",
+  license: "Proprietary",
+  keywords: {graphics,render,2d,3d,opengl,canvas}
+}
+
+@type{
+  name: "Canvas",
+  fields: {width:int, height:int, context:string}
+}
+
+@type{
+  name: "Shape",
+  fields: {type:string, position:object, size:object, color:string}
+}
+
+@type{
+  name: "Mesh",
+  fields: {vertices:array, faces:array, normals:array, uvs:array}
+}
+
+@function{
+  name: "createCanvas",
+  params: {width:int, height:int},
+  returns: "Canvas"
+}
+
+@function{
+  name: "drawRect",
+  params: {canvas:Canvas, x:int, y:int, width:int, height:int, color:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "drawCircle",
+  params: {canvas:Canvas, x:int, y:int, radius:int, color:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "drawLine",
+  params: {canvas:Canvas, x1:int, y1:int, x2:int, y2:int, color:string, width:int},
+  returns: "boolean"
+}
+
+@function{
+  name: "drawText",
+  params: {canvas:Canvas, text:string, x:int, y:int, font:string, color:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "createMesh",
+  params: {vertices:array, faces:array},
+  returns: "Mesh"
+}
+
+@function{
+  name: "renderMesh",
+  params: {mesh:Mesh, camera:object, light:object},
+  returns: "boolean"
+}
+
+@constant{
+  namespace: "CONTEXT",
+  constants: {
+    2D: {value:"2d", type:"string"},
+    WEBGL: {value:"webgl", type:"string"},
+    WEBGL2: {value:"webgl2", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "BLEND_MODE",
+  constants: {
+    NORMAL: {value:"normal", type:"string"},
+    MULTIPLY: {value:"multiply", type:"string"},
+    SCREEN: {value:"screen", type:"string"},
+    OVERLAY: {value:"overlay", type:"string"}
+  }
+}
+
+^END_OF_BUILTIN

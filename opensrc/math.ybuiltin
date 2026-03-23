@@ -1,0 +1,78 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "math",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Advanced mathematical operations",
+  license: "Proprietary",
+  keywords: {math,algebra,geometry,statistics,calculus}
+}
+
+@function{
+  name: "abs",
+  params: {x:float},
+  returns: "float"
+}
+
+@function{
+  name: "sqrt",
+  params: {x:float},
+  returns: "float"
+}
+
+@function{
+  name: "pow",
+  params: {base:float, exponent:float},
+  returns: "float"
+}
+
+@function{
+  name: "sin",
+  params: {x:float},
+  returns: "float"
+}
+
+@function{
+  name: "cos",
+  params: {x:float},
+  returns: "float"
+}
+
+@function{
+  name: "tan",
+  params: {x:float},
+  returns: "float"
+}
+
+@function{
+  name: "log",
+  params: {x:float, base:float},
+  returns: "float"
+}
+
+@function{
+  name: "random",
+  params: {min:float, max:float},
+  returns: "float"
+}
+
+@constant{
+  name: "PI",
+  value: 3.14159265359,
+  type: "float"
+}
+
+@constant{
+  name: "E",
+  value: 2.71828182846,
+  type: "float"
+}
+
+@constant{
+  name: "PHI",
+  value: 1.61803398875,
+  type: "float"
+}
+
+^END_OF_BUILTIN

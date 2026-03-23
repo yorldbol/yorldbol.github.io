@@ -1,0 +1,83 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "audio",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "Audio processing and manipulation",
+  license: "Proprietary",
+  keywords: {audio,sound,music,wav,mp3}
+}
+
+@type{
+  name: "AudioFile",
+  fields: {path:string, format:string, duration:float, sampleRate:int, channels:int}
+}
+
+@type{
+  name: "AudioBuffer",
+  fields: {data:array, sampleRate:int, channels:int}
+}
+
+@function{
+  name: "load",
+  params: {path:string},
+  returns: "AudioFile"
+}
+
+@function{
+  name: "save",
+  params: {audio:AudioBuffer, path:string, format:string},
+  returns: "boolean"
+}
+
+@function{
+  name: "play",
+  params: {audio:AudioFile},
+  returns: "boolean"
+}
+
+@function{
+  name: "record",
+  params: {duration:float, sampleRate:int},
+  returns: "AudioBuffer"
+}
+
+@function{
+  name: "trim",
+  params: {audio:AudioBuffer, start:float, end:float},
+  returns: "AudioBuffer"
+}
+
+@function{
+  name: "fade",
+  params: {audio:AudioBuffer, type:string, duration:float},
+  returns: "AudioBuffer"
+}
+
+@function{
+  name: "normalize",
+  params: {audio:AudioBuffer, level:float},
+  returns: "AudioBuffer"
+}
+
+@constant{
+  namespace: "FORMAT",
+  constants: {
+    WAV: {value:"wav", type:"string"},
+    MP3: {value:"mp3", type:"string"},
+    OGG: {value:"ogg", type:"string"},
+    FLAC: {value:"flac", type:"string"}
+  }
+}
+
+@constant{
+  namespace: "SAMPLE_RATE",
+  constants: {
+    CD: {value:44100, type:"int"},
+    DVD: {value:48000, type:"int"},
+    HD: {value:96000, type:"int"}
+  }
+}
+
+^END_OF_BUILTIN

@@ -1,0 +1,41 @@
+^yorl-builtin 1.0.0-2437\
+
+@metadata{
+  name: "xml",
+  version: "1.0.0",
+  author: "Yorl Official",
+  description: "XML parsing and generation",
+  license: "Proprietary",
+  keywords: {xml,parse,dom,xpath}
+}
+
+@type{
+  name: "Element",
+  fields: {tag:string, attributes:object, children:array, text:string}
+}
+
+@function{
+  name: "parse",
+  params: {xml:string},
+  returns: "Element"
+}
+
+@function{
+  name: "stringify",
+  params: {element:Element, pretty:boolean},
+  returns: "string"
+}
+
+@function{
+  name: "xpath",
+  params: {element:Element, query:string},
+  returns: "array"
+}
+
+@function{
+  name: "validate",
+  params: {xml:string, schema:string},
+  returns: "boolean"
+}
+
+^END_OF_BUILTIN
