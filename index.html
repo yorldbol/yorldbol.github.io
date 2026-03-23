@@ -718,6 +718,7 @@
             const [filter, setFilter] = useState('all');
             const [showModal, setShowModal] = useState(false);
             const [showJoinModal, setShowJoinModal] = useState(false);
+            const [joinStep, setJoinStep] = useState(1);
             const [libraries, setLibraries] = useState([]);
             const [loading, setLoading] = useState(true);
             const [formData, setFormData] = useState({
@@ -979,6 +980,7 @@ Submitted via yorldbol.github.io volunteer form`;
                 alert('✅ Thank you for your interest! Please complete the application on GitHub.');
                 
                 setShowJoinModal(false);
+                setJoinStep(1);
                 setJoinFormData({
                     fullName: '',
                     email: '',
@@ -1009,7 +1011,10 @@ Submitted via yorldbol.github.io volunteer form`;
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <button 
                                     className="join-button"
-                                    onClick={() => setShowJoinModal(true)}
+                                    onClick={() => {
+                                        setShowJoinModal(true);
+                                        setJoinStep(1);
+                                    }}
                                 >
                                     <span className="material-icons-outlined">groups</span>
                                     Join Us
@@ -1317,108 +1322,138 @@ Submitted via yorldbol.github.io volunteer form`;
                     )}
 
                     {showJoinModal && (
-                        <div className="modal-overlay" onClick={() => setShowJoinModal(false)}>
+                        <div className="modal-overlay" onClick={() => {
+                            setShowJoinModal(false);
+                            setJoinStep(1);
+                        }}>
                             <div className="modal" onClick={(e) => e.stopPropagation()}>
                                 <div className="modal-header">
                                     <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
                                         <span className="material-icons-outlined" style={{color: '#1a73e8', fontSize: 28}}>groups</span>
                                         <div className="modal-title">Join Volunteers</div>
                                     </div>
-                                    <button className="close-button" onClick={() => setShowJoinModal(false)}>
+                                    <button className="close-button" onClick={() => {
+                                        setShowJoinModal(false);
+                                        setJoinStep(1);
+                                    }}>
                                         <span className="material-icons-outlined">close</span>
                                     </button>
                                 </div>
                                 
                                 <div className="join-modal-content">
-                                    <div className="join-info-box">
-                                        <div className="join-info-title">After you join our team, you will automatically be able to:</div>
-                                        <ul className="join-info-list">
-                                            <li>Merge pull requests</li>
-                                            <li>Manage all community libraries (read, share, delete, disable, shutdown, enable, open)</li>
-                                            <li>Get important information from our community teams</li>
-                                            <li>Help us improve our systems</li>
-                                        </ul>
-                                    </div>
-
-                                    <form onSubmit={handleJoinSubmit}>
-                                        <div className="form-group">
-                                            <label className="form-label">Full Name *</label>
-                                            <input
-                                                type="text"
-                                                name="fullName"
-                                                className="form-input"
-                                                value={joinFormData.fullName}
-                                                onChange={handleJoinInputChange}
-                                                required
-                                                placeholder="Your full name"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="form-label">Email *</label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                className="form-input"
-                                                value={joinFormData.email}
-                                                onChange={handleJoinInputChange}
-                                                required
-                                                placeholder="your.email@example.com"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="form-label">GitHub Username *</label>
-                                            <input
-                                                type="text"
-                                                name="github"
-                                                className="form-input"
-                                                value={joinFormData.github}
-                                                onChange={handleJoinInputChange}
-                                                required
-                                                placeholder="@username"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="form-label">Experience *</label>
-                                            <textarea
-                                                name="experience"
-                                                className="form-textarea"
-                                                value={joinFormData.experience}
-                                                onChange={handleJoinInputChange}
-                                                required
-                                                placeholder="Tell us about your experience with programming, open source, etc."
-                                                rows="3"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="form-label">Why do you want to join? *</label>
-                                            <textarea
-                                                name="motivation"
-                                                className="form-textarea"
-                                                value={joinFormData.motivation}
-                                                onChange={handleJoinInputChange}
-                                                required
-                                                placeholder="What motivates you to volunteer with us?"
-                                                rows="3"
-                                            />
-                                        </div>
-                                        
-                                        <div className="modal-actions">
-                                            <button 
-                                                type="button" 
-                                                className="button-secondary"
-                                                onClick={() => setShowJoinModal(false)}
-                                            >
-                                                No, Thanks
-                                            </button>
-                                            <button 
-                                                type="submit" 
-                                                className="button-primary"
-                                                disabled={!joinFormData.fullName || !joinFormData.email || !joinFormData.github || !joinFormData.experience || !joinFormData.motivation}
-                                            >
-                                                Confirm
-                                            </button>
-                                        </div>
-                                    </form>
+                                    {joinStep === 1 ? (
+                                        <>
+                                            <div className="join-info-box">
+                                                <div className="join-info-title">After you join our team, you will automatically be able to:</div>
+                                                <ul className="join-info-list">
+                                                    <li>Merge pull requests</li>
+                                                    <li>Manage all community libraries (read, share, delete, disable, shutdown, enable, open)</li>
+                                                    <li>Get important information from our community teams</li>
+                                                    <li>Help us improve our systems</li>
+                                                </ul>
+                                            </div>
+                                            
+                                            <div className="modal-actions">
+                                                <button 
+                                                    type="button" 
+                                                    className="button-secondary"
+                                                    onClick={() => {
+                                                        setShowJoinModal(false);
+                                                        setJoinStep(1);
+                                                    }}
+                                                >
+                                                    No, Thanks
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    className="button-primary"
+                                                    onClick={() => setJoinStep(2)}
+                                                >
+                                                    Confirm
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <form onSubmit={handleJoinSubmit}>
+                                            <div className="form-group">
+                                                <label className="form-label">Full Name *</label>
+                                                <input
+                                                    type="text"
+                                                    name="fullName"
+                                                    className="form-input"
+                                                    value={joinFormData.fullName}
+                                                    onChange={handleJoinInputChange}
+                                                    required
+                                                    placeholder="Your full name"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Email *</label>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    className="form-input"
+                                                    value={joinFormData.email}
+                                                    onChange={handleJoinInputChange}
+                                                    required
+                                                    placeholder="your.email@example.com"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">GitHub Username *</label>
+                                                <input
+                                                    type="text"
+                                                    name="github"
+                                                    className="form-input"
+                                                    value={joinFormData.github}
+                                                    onChange={handleJoinInputChange}
+                                                    required
+                                                    placeholder="@username"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Experience *</label>
+                                                <textarea
+                                                    name="experience"
+                                                    className="form-textarea"
+                                                    value={joinFormData.experience}
+                                                    onChange={handleJoinInputChange}
+                                                    required
+                                                    placeholder="Tell us about your experience with programming, open source, etc."
+                                                    rows="3"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Why do you want to join? *</label>
+                                                <textarea
+                                                    name="motivation"
+                                                    className="form-textarea"
+                                                    value={joinFormData.motivation}
+                                                    onChange={handleJoinInputChange}
+                                                    required
+                                                    placeholder="What motivates you to volunteer with us?"
+                                                    rows="3"
+                                                />
+                                            </div>
+                                            
+                                            <div className="modal-actions">
+                                                <button 
+                                                    type="button" 
+                                                    className="button-secondary"
+                                                    onClick={() => setJoinStep(1)}
+                                                >
+                                                    Back
+                                                </button>
+                                                <button 
+                                                    type="submit" 
+                                                    className="button-primary"
+                                                    disabled={!joinFormData.fullName || !joinFormData.email || !joinFormData.github || !joinFormData.experience || !joinFormData.motivation}
+                                                >
+                                                    Submit Application
+                                                </button>
+                                            </div>
+                                        </form>
+                                    )}
                                 </div>
                             </div>
                         </div>
