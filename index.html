@@ -628,24 +628,31 @@
                         const opensrcFiles = await response2.json();
                         
                         const allFiles = [...opensrcFiles, ...usrsrFiles];
-                        const ybuiltinFiles = allFiles.filter(f => f.name.endsWith('.ybuiltin'));
+                        const ybuiltinFiles = allFiles.filter(f => f.name && f.name.endsWith('.ybuiltin'));
                         
-                        const libraryData = ybuiltinFiles.map(file => {
-                            const name = file.name.replace('.ybuiltin', '');
-                            const type = file.path.startsWith('opensrc') ? 'official' : 'community';
-                            return {
-                                name,
-                                type,
-                                description: getDescription(name),
-                                keywords: getKeywords(name),
-                                author: type === 'official' ? 'Yorl Official' : 'Yorl Community'
-                            };
-                        });
-                        
-                        setLibraries(libraryData);
+                        if (ybuiltinFiles.length > 0) {
+                            const libraryData = ybuiltinFiles.map(file => {
+                                const name = file.name.replace('.ybuiltin', '');
+                                const type = file.path.startsWith('opensrc') ? 'official' : 'community';
+                                return {
+                                    name,
+                                    type,
+                                    description: getDescription(name),
+                                    keywords: getKeywords(name),
+                                    author: type === 'official' ? 'Yorl Official' : 'Yorl Community'
+                                };
+                            });
+                            
+                            setLibraries(libraryData);
+                        } else {
+                            // Fallback to static data
+                            setLibraries(getStaticLibraries());
+                        }
                         setLoading(false);
                     } catch (error) {
                         console.error('Error fetching libraries:', error);
+                        // Fallback to static data
+                        setLibraries(getStaticLibraries());
                         setLoading(false);
                     }
                 };
@@ -655,6 +662,32 @@
                 const interval = setInterval(fetchLibraries, 30000);
                 return () => clearInterval(interval);
             }, []);
+
+            const getStaticLibraries = () => {
+                return [
+                    { name: 'core', type: 'official', description: 'Core types and functions', keywords: ['core', 'basic', 'fundamental'], author: 'Yorl Official' },
+                    { name: 'image', type: 'official', description: 'Image processing and manipulation', keywords: ['image', 'graphics', 'photo'], author: 'Yorl Official' },
+                    { name: 'data', type: 'official', description: 'Data structures and operations', keywords: ['data', 'array', 'dict'], author: 'Yorl Official' },
+                    { name: 'ai', type: 'official', description: 'AI and machine learning', keywords: ['ai', 'ml', 'neural', 'model'], author: 'Yorl Official' },
+                    { name: 'network', type: 'official', description: 'TCP/UDP networking and protocols', keywords: ['network', 'tcp', 'udp', 'socket'], author: 'Yorl Official' },
+                    { name: 'crypto', type: 'official', description: 'Cryptography and security', keywords: ['crypto', 'encryption', 'hash', 'security'], author: 'Yorl Official' },
+                    { name: 'file', type: 'official', description: 'File I/O and compression', keywords: ['file', 'io', 'read', 'write', 'compress'], author: 'Yorl Official' },
+                    { name: 'json', type: 'official', description: 'JSON parsing and serialization', keywords: ['json', 'parse', 'serialize'], author: 'Yorl Official' },
+                    { name: 'xml', type: 'official', description: 'XML parsing and generation', keywords: ['xml', 'parse', 'dom', 'xpath'], author: 'Yorl Official' },
+                    { name: 'datetime', type: 'official', description: 'Date and time operations', keywords: ['date', 'time', 'datetime', 'timestamp'], author: 'Yorl Official' },
+                    { name: 'math', type: 'official', description: 'Advanced mathematical operations', keywords: ['math', 'algebra', 'geometry', 'calculus'], author: 'Yorl Official' },
+                    { name: 'string', type: 'official', description: 'String manipulation and utilities', keywords: ['string', 'text', 'manipulation'], author: 'Yorl Official' },
+                    { name: 'array', type: 'official', description: 'Array operations and utilities', keywords: ['array', 'list', 'collection'], author: 'Yorl Official' },
+                    { name: 'regex', type: 'official', description: 'Regular expression operations', keywords: ['regex', 'pattern', 'match'], author: 'Yorl Official' },
+                    { name: 'audio', type: 'official', description: 'Audio processing and manipulation', keywords: ['audio', 'sound', 'music', 'wav'], author: 'Yorl Official' },
+                    { name: 'video', type: 'official', description: 'Video processing and manipulation', keywords: ['video', 'movie', 'mp4', 'codec'], author: 'Yorl Official' },
+                    { name: 'graphics', type: 'official', description: '2D/3D graphics and rendering', keywords: ['graphics', 'render', '2d', '3d'], author: 'Yorl Official' },
+                    { name: 'testing', type: 'official', description: 'Testing and assertion utilities', keywords: ['test', 'assert', 'mock', 'unit'], author: 'Yorl Official' },
+                    { name: 'logging', type: 'official', description: 'Logging and monitoring utilities', keywords: ['log', 'logger', 'debug', 'monitor'], author: 'Yorl Official' },
+                    { name: 'web', type: 'community', description: 'HTTP/WebSocket/REST APIs', keywords: ['web', 'http', 'websocket', 'rest', 'api'], author: 'Yorl Community' },
+                    { name: 'database', type: 'community', description: 'SQL/NoSQL database operations', keywords: ['database', 'sql', 'nosql', 'query'], author: 'Yorl Community' }
+                ];
+            };
 
             const getDescription = (name) => {
                 const descriptions = {
